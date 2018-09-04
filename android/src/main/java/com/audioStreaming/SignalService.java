@@ -287,13 +287,10 @@ public class SignalService extends Service implements ExoPlayer.EventListener, M
 
     public void play() {
         startForeground(NOTIFY_ME_ID, notification);
-        /*
+
         if (player != null) {
-            player.setPlayWhenReady(false);
             player.stop();
-            player.seekTo(0);
         }
-        */
 
         // Create player
         Handler mainHandler = new Handler();
