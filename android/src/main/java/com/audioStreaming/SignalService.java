@@ -126,10 +126,10 @@ public class SignalService extends Service implements ExoPlayer.EventListener, M
 
     private void runAsForeground() {
         notifyBuilder = new NotificationCompat.Builder(this)
-                .setSmallIcon(android.R.drawable.ic_media_play) // TODO Use app icon instead
-                .setColor(Color.parseColor("#AB0074"))
-                .setContentTitle("TRX Radio")
-                .setContentText("Caricamento in corso...");
+                .setColor(Color.parseColor("#1D3747"))
+                .setSmallIcon(R.drawable.ic_player)
+                .setContentTitle("VoxM")
+                .setContentText("");
 
 
         notifyManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -140,7 +140,7 @@ public class SignalService extends Service implements ExoPlayer.EventListener, M
                 notifyManager.createNotificationChannel(channel);
             }
         }
-        
+
         Intent launchActivity = new Intent(context, getMainActivityClass());
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, launchActivity, 0);
         notifyBuilder.setContentIntent(pendingIntent);
@@ -335,10 +335,11 @@ public class SignalService extends Service implements ExoPlayer.EventListener, M
     }
 
     public void pause() {
-        Assertions.assertNotNull(player);
-        player.setPlayWhenReady(false);
-        sendBroadcast(new Intent(Mode.STOPPED));
-        metadataTimer.cancel();
+        if (this.isPlaying()) {
+            player.setPlayWhenReady(false);
+            sendBroadcast(new Intent(Mode.STOPPED));
+            metadataTimer.cancel();
+        }
     }
 
     public void resume() {
@@ -347,11 +348,12 @@ public class SignalService extends Service implements ExoPlayer.EventListener, M
     }
 
     public void stop() {
-        Assertions.assertNotNull(player);
-        stopForeground(true);
-        player.setPlayWhenReady(false);
-        sendBroadcast(new Intent(Mode.STOPPED));
-        metadataTimer.cancel();
+        if (this.isPlaying()) {
+            stopForeground(true);
+            player.setPlayWhenReady(false);
+            sendBroadcast(new Intent(Mode.STOPPED));
+            metadataTimer.cancel();
+        }
     }
 
     public boolean isPlaying() {
