@@ -27,6 +27,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.content.pm.ApplicationInfo;
 
+import com.audioStreaming.IcyEvents;
+
 import com.facebook.infer.annotation.Assertions;
 import com.facebook.react.bridge.ReactMethod;
 import com.google.android.exoplayer2.DefaultLoadControl;
@@ -227,19 +229,11 @@ public class SignalService extends Service implements ExoPlayer.EventListener, M
         }
     }
 
-    @Override
-    public void onTimelineChanged(Timeline timeline, Object manifest) {
-    }
 
 
     @Override
     public void onPlayerError(ExoPlaybackException error) {
         sendBroadcast(new Intent(Mode.ERROR));
-    }
-
-    @Override
-    public void onPositionDiscontinuity() {
-
     }
 
     private static String getDefaultUserAgent() {
@@ -301,6 +295,8 @@ public class SignalService extends Service implements ExoPlayer.EventListener, M
         ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
         DefaultBandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
         DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(this.getApplication(), getDefaultUserAgent(), bandwidthMeter);
+        IcyEvents listener = new IcyEvents();
+        DataSource.Factory dataSourceFactoryMeta = new DefaultDataSourceFactory(this.getApplication(), null, listener.getIcyDataSource());
         MediaSource audioSource = new ExtractorMediaSource(Uri.parse(this.streamingURL), dataSourceFactory, extractorsFactory, mainHandler, this);
 
         // Start preparing audio

@@ -20,6 +20,7 @@ android {
 }
 
 dependencies {
+    compile 'saschpe.android:exoplayer2-ext-icy:2.1.0'
     compile 'com.facebook.react:react-native:0.20.+'
     compile 'com.google.android.exoplayer:exoplayer:r2.4.2'
     compile 'com.android.support:support-v4:25.3.1'
