@@ -148,9 +148,6 @@ public class SignalService extends Service implements ExoPlayer.EventListener, M
         notification = notifyBuilder.build();
     }
 
-
-
-
     public void setURLStreaming(String streamingURL) {
         this.streamingURL = streamingURL;
     }
