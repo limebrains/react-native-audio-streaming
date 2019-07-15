@@ -227,7 +227,6 @@ public class SignalService extends Service implements ExoPlayer.EventListener, M
         }
     }
 
-    @Override
     public void onTimelineChanged(Timeline timeline, Object manifest) {
     }
 
@@ -237,9 +236,7 @@ public class SignalService extends Service implements ExoPlayer.EventListener, M
         sendBroadcast(new Intent(Mode.ERROR));
     }
 
-    @Override
     public void onPositionDiscontinuity() {
-
     }
 
     private static String getDefaultUserAgent() {
