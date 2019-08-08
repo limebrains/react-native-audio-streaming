@@ -24,6 +24,7 @@ public class ReactNativeAudioStreamingModule extends ReactContextBaseJavaModule
         implements ServiceConnection {
 
   public static final String SHOULD_SHOW_NOTIFICATION = "showInAndroidNotifications";
+  public static final String NOTIFICATION_TITLE = "notificationTitle";
   private ReactApplicationContext context;
 
   private Class<?> clsActivity;
@@ -32,6 +33,7 @@ public class ReactNativeAudioStreamingModule extends ReactContextBaseJavaModule
   private String streamingURL;
   private boolean play = false;
   private boolean shouldShowNotification;
+  private String notificationTitle = "";
 
 
   public ReactNativeAudioStreamingModule(ReactApplicationContext reactContext) {
@@ -109,6 +111,9 @@ public class ReactNativeAudioStreamingModule extends ReactContextBaseJavaModule
     if (amResult == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
       this.streamingURL = streamingURL;
       this.shouldShowNotification = options.hasKey(SHOULD_SHOW_NOTIFICATION) && options.getBoolean(SHOULD_SHOW_NOTIFICATION);
+      if (options.hasKey(NOTIFICATION_TITLE)) {
+        this.notificationTitle = options.getString(NOTIFICATION_TITLE);
+      }
       playInternal();
 
     }
@@ -161,6 +166,9 @@ public class ReactNativeAudioStreamingModule extends ReactContextBaseJavaModule
     play = true;
     if (!isServicePlaying() && signal != null) {
       signal.setURLStreaming(streamingURL); // URL of MP3 or AAC stream
+      if (this.notificationTitle.length() > 0) {
+        signal.setNotificationTitle(this.notificationTitle);
+      }
       signal.play();
 
     }

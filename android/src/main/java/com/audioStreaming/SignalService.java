@@ -90,6 +90,7 @@ public class SignalService extends Service implements ExoPlayer.EventListener, M
     private final SignalReceiver receiver = new SignalReceiver(this);
     private Context context;
     private String streamingURL;
+    private String notificationTitle = "VoxM";
     private EventsReceiver eventsReceiver;
     private ReactNativeAudioStreamingModule module;
 
@@ -128,7 +129,7 @@ public class SignalService extends Service implements ExoPlayer.EventListener, M
         notifyBuilder = new NotificationCompat.Builder(this)
                 .setColor(Color.parseColor("#1D3747"))
                 .setSmallIcon(R.drawable.ic_player)
-                .setContentTitle("VoxM")
+                .setContentTitle(this.notificationTitle)
                 .setContentText("");
 
 
@@ -150,6 +151,10 @@ public class SignalService extends Service implements ExoPlayer.EventListener, M
 
     public void setURLStreaming(String streamingURL) {
         this.streamingURL = streamingURL;
+    }
+
+    public void setNotificationTitle(String notificationTitle) {
+        this.notificationTitle = notificationTitle;
     }
 
     @Override
@@ -294,7 +299,7 @@ public class SignalService extends Service implements ExoPlayer.EventListener, M
             PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, launchActivity, 0);
             Notification notification = notificationBuilder.setOngoing(true)
                     .setSmallIcon(R.drawable.ic_player)
-                    .setContentTitle("VoxM")
+                    .setContentTitle(this.notificationTitle)
                     .setPriority(NotificationManager.IMPORTANCE_MIN)
                     .setCategory(Notification.CATEGORY_SERVICE)
                     .setContentIntent(pendingIntent)
