@@ -279,7 +279,31 @@ public class SignalService extends Service implements ExoPlayer.EventListener, M
     }
 
     public void play() {
-        startForeground(NOTIFY_ME_ID, notification);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            String NOTIFICATION_CHANNEL_ID = "live.voxm.player";
+            String channelName = "VoxM Player Service";
+            NotificationChannel chan = new NotificationChannel(NOTIFICATION_CHANNEL_ID, channelName, NotificationManager.IMPORTANCE_NONE);
+            chan.setLightColor(Color.parseColor("#1D3747"));
+            chan.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
+            NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            assert manager != null;
+            manager.createNotificationChannel(chan);
+
+            NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID);
+            Intent launchActivity = new Intent(context, getMainActivityClass());
+            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, launchActivity, 0);
+            Notification notification = notificationBuilder.setOngoing(true)
+                    .setSmallIcon(R.drawable.ic_player)
+                    .setContentTitle("VoxM")
+                    .setPriority(NotificationManager.IMPORTANCE_MIN)
+                    .setCategory(Notification.CATEGORY_SERVICE)
+                    .setContentIntent(pendingIntent)
+                    .build();
+            startForeground(2, notification);
+        }
+        else {
+            startForeground(NOTIFY_ME_ID, notification);
+        }
 
         if (player != null) {
             player.stop();
